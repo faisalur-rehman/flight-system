@@ -1,5 +1,5 @@
 export const url = {
-  signup: 'signup',
+  register: 'register',
   verify: 'verifyOtp',
   resendOtp: 'resendOtpCode',
   login: 'login',

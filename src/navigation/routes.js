@@ -2,46 +2,10 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NAVIGATION_ROUTES} from './navigationRoutes';
-// import {
-//   BadgesScreen,
-//   BioScreen,
-//   ChangePasswordScreen,
-//   ForgotPasswordScreen,
-//   LoginScreen,
-//   ResetPasswordScreen,
-//   SettingsScreen,
-//   SplashScreen,
-//   TrophiesScreen,
-// } from '../screens';
-// import SignupScreen from '../screens/SignupScreen';
-// import VerficationScreen from '../screens/VerificationScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-// import {
-//   AvatarImagesContainer,
-//   CoverImagesContainer,
-//   HomeContainer,
-//   LeaderboardContainer,
-//   UsersChatContainer,
-//   MovieDetailContainer,
-//   NotificationContainer,
-//   ProfileContainer,
-//   ScoreboardContainer,
-//   MessageContainer,
-// } from '../containers';
-// import {
-//   ChatFocusedIcon,
-//   ChatIcon,
-//   HomeIcon,
-//   HomeIconFocused,
-//   LeaderboardFocusedIcon,
-//   NotificationFocusedIcon,
-//   NotificationIcon,
-//   ScoreFocused,
-//   ScoreIcon,
-//   StarIcon,
-// } from '../assets/images';
+
 import {StyleSheet, Text, View} from 'react-native';
-import {LoginContainer} from '../container';
+import {LoginContainer, SignupContainer} from '../container';
 import {colors} from '../utils/theme';
 
 const AuthStack = createNativeStackNavigator();
@@ -276,17 +240,17 @@ function Home() {
 
 function Authentication() {
   return (
-    <AuthStack.Navigator initialRouteName={NAVIGATION_ROUTES.SPLASH}>
+    <AuthStack.Navigator initialRouteName={NAVIGATION_ROUTES.SIGNUP}>
       <AuthStack.Screen
         name={NAVIGATION_ROUTES.LOGIN}
         component={LoginContainer}
         options={{headerShown: false}}
       />
-      {/* <AuthStack.Screen
+      <AuthStack.Screen
         name={NAVIGATION_ROUTES.SIGNUP}
-        component={SignupScreen}
+        component={SignupContainer}
         options={{headerShown: false}}
-      /> */}
+      />
       {/* <AuthStack.Screen
         name={NAVIGATION_ROUTES.VERIFICATION}
         component={VerficationScreen}

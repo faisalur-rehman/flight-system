@@ -5,7 +5,7 @@ import {url} from '../api/urls';
 import {showMessage} from '../utils/helpers';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-const LoginContainer = () => {
+const LoginContainer = ({navigation}) => {
   const [fields, setFields] = useState({email: '', password: ''});
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -54,6 +54,7 @@ const LoginContainer = () => {
         handleChecked={setChecked}
         handleLogin={handleLogin}
         handleInput={handleInput}
+        navigation={navigation}
       />
       <Spinner visible={loading} />
     </>
