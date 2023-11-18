@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {colors, fonts} from '../utils/theme';
+import {colors, fonts} from '../../utils/theme';
 
 const TextField = ({
   leftIcon,

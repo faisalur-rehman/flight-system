@@ -3,7 +3,7 @@ import React from 'react';
 import {BgImage, HeroIcon} from '../../assets';
 import {AuthCard} from '../../components';
 import {colors, fonts} from '../../utils/theme';
-import TextField from '../../components/TextField';
+import TextField from '../../components/textfields/TextField';
 import {CheckBox} from '@rneui/themed';
 import Button from '../../components/Button';
 import {NAVIGATION_ROUTES} from '../../navigation/navigationRoutes';

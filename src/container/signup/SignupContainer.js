@@ -4,6 +4,7 @@ import {SignupScreen} from '../../screens';
 import {showMessage} from '../../utils/helpers';
 import {api} from '../../api';
 import {url} from '../../api/urls';
+import {NAVIGATION_ROUTES} from '../../navigation/navigationRoutes';
 
 const SignupContainer = ({navigation}) => {
   const [fields, setFields] = useState({
@@ -34,10 +35,6 @@ const SignupContainer = ({navigation}) => {
       showMessage('Please enter your last name.');
       return false;
     }
-    if (!phone) {
-      showMessage('Please enter a your phone number.');
-      return false;
-    }
     if (!email || !regex.test(email)) {
       showMessage('Please enter a valid email address.');
       return false;
@@ -52,6 +49,10 @@ const SignupContainer = ({navigation}) => {
 
     if (confirmPassword != password) {
       showMessage('Passwords does not match.');
+      return false;
+    }
+    if (!phone) {
+      showMessage('Please enter a your phone number.');
       return false;
     }
     if (!checked) {
@@ -71,6 +72,9 @@ const SignupContainer = ({navigation}) => {
       const res = await api.post(url.register, fields);
       console.log({status: res.status, data: res.data});
       if (res.status == 200) {
+        navigation?.navigate(NAVIGATION_ROUTES.OTP_VERFICATION, {
+          userId: res.data?.data?.user_id,
+        });
       } else {
         showMessage(res.data?.message);
       }

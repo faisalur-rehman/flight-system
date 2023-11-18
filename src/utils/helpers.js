@@ -23,5 +23,5 @@ export const showMessage = (
 
   setTimeout(function () {
     Snackbar.show({text: message, duration: getDuration(), ...options});
-  }, 50);
+  }, 500);
 };

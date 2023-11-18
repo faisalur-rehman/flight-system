@@ -5,8 +5,17 @@ import {NAVIGATION_ROUTES} from './navigationRoutes';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {StyleSheet, Text, View} from 'react-native';
-import {LoginContainer, SignupContainer} from '../container';
-import {colors} from '../utils/theme';
+import {
+  BookingContainer,
+  HomeContainer,
+  LoginContainer,
+  OffersContainer,
+  OtpVerficationContainer,
+  SignupContainer,
+  WalletContainer,
+} from '../container';
+import {colors, fonts} from '../utils/theme';
+import {BookingIcon, HomeIcon, OffersIcon, WalletIcon} from '../assets';
 
 const AuthStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,11 +29,12 @@ function Tabs() {
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: '#222222',
+          backgroundColor: 'rgb(242, 251, 255)',
           borderTopWidth: 0,
           justifyContent: 'center',
           alignItems: 'center',
           paddingRight: 5,
+          height: 80,
         },
       }}>
       <Tab.Screen
@@ -41,12 +51,12 @@ function Tabs() {
                   alignItems: 'center',
                   minWidth: '100%',
                 }}>
-                {focused ? <HomeIconFocused /> : <HomeIcon />}
+                {focused ? <HomeIcon /> : <HomeIcon />}
                 <Text
                   style={[
                     styles.tabText,
                     {
-                      color: focused ? colors.primaryColor : colors.white,
+                      color: focused ? colors.primary : colors.textGray,
                     },
                   ]}>
                   Home
@@ -57,8 +67,8 @@ function Tabs() {
         }}
       />
       <Tab.Screen
-        name={NAVIGATION_ROUTES.MESSAGES}
-        component={UsersChatContainer}
+        name={NAVIGATION_ROUTES.WALLET}
+        component={WalletContainer}
         options={{
           headerShown: false,
           unmountOnBlur: true,
@@ -70,15 +80,15 @@ function Tabs() {
                   alignItems: 'center',
                   minWidth: '100%',
                 }}>
-                {focused ? <ChatFocusedIcon /> : <ChatIcon />}
+                {focused ? <WalletIcon /> : <WalletIcon />}
                 <Text
                   style={[
                     styles.tabText,
                     {
-                      color: focused ? colors.primaryColor : colors.white,
+                      color: focused ? colors.primary : colors.textGray,
                     },
                   ]}>
-                  Messages
+                  Wallet
                 </Text>
               </View>
             );
@@ -86,8 +96,8 @@ function Tabs() {
         }}
       />
       <Tab.Screen
-        name={NAVIGATION_ROUTES.NOTIFICATION}
-        component={NotificationContainer}
+        name={NAVIGATION_ROUTES.OFFERS}
+        component={OffersContainer}
         options={{
           headerShown: false,
           unmountOnBlur: true,
@@ -99,15 +109,15 @@ function Tabs() {
                   alignItems: 'center',
                   minWidth: '100%',
                 }}>
-                {focused ? <NotificationFocusedIcon /> : <NotificationIcon />}
+                {focused ? <OffersIcon /> : <OffersIcon />}
                 <Text
                   style={[
                     styles.tabText,
                     {
-                      color: focused ? colors.primaryColor : colors.white,
+                      color: focused ? colors.primary : colors.textGray,
                     },
                   ]}>
-                  Notification
+                  Offers
                 </Text>
               </View>
             );
@@ -115,8 +125,8 @@ function Tabs() {
         }}
       />
       <Tab.Screen
-        name={NAVIGATION_ROUTES.SCORE_BOARD}
-        component={ScoreboardContainer}
+        name={NAVIGATION_ROUTES.BOOKING}
+        component={BookingContainer}
         options={{
           headerShown: false,
           unmountOnBlur: true,
@@ -128,44 +138,15 @@ function Tabs() {
                   alignItems: 'center',
                   minWidth: '100%',
                 }}>
-                {focused ? <ScoreFocused /> : <ScoreIcon />}
+                {focused ? <BookingIcon /> : <BookingIcon />}
                 <Text
                   style={[
                     styles.tabText,
                     {
-                      color: focused ? colors.primaryColor : colors.white,
+                      color: focused ? colors.primary : colors.textGray,
                     },
                   ]}>
-                  Score
-                </Text>
-              </View>
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name={NAVIGATION_ROUTES.LEADERBOARD}
-        component={LeaderboardContainer}
-        options={{
-          headerShown: false,
-          unmountOnBlur: true,
-          tabBarIcon: ({focused}) => {
-            return (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  minWidth: '100%',
-                }}>
-                {focused ? <LeaderboardFocusedIcon /> : <StarIcon />}
-                <Text
-                  style={[
-                    styles.tabText,
-                    {
-                      color: focused ? colors.primaryColor : colors.white,
-                    },
-                  ]}>
-                  Leaderboard
+                  Booking
                 </Text>
               </View>
             );
@@ -184,63 +165,13 @@ function Home() {
         component={Tabs}
         options={{headerShown: false}}
       />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.MOVIE_DETAIL}
-        component={MovieDetailContainer}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.PROFILE}
-        component={ProfileContainer}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.COVER_IMAGES}
-        component={CoverImagesContainer}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.AVATAR_IMAGES}
-        component={AvatarImagesContainer}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.TROPHIES}
-        component={TrophiesScreen}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.BADGES}
-        component={BadgesScreen}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.SETTINGS}
-        component={SettingsScreen}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.CHANGE_PASSWORD}
-        component={ChangePasswordScreen}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.BIO_SCREEN}
-        component={BioScreen}
-        options={{headerShown: false}}
-      />
-      <HomeStack.Screen
-        name={NAVIGATION_ROUTES.MESSAGE_SCREEN}
-        component={MessageContainer}
-        options={{headerShown: false}}
-      />
     </HomeStack.Navigator>
   );
 }
 
 function Authentication() {
   return (
-    <AuthStack.Navigator initialRouteName={NAVIGATION_ROUTES.SIGNUP}>
+    <AuthStack.Navigator initialRouteName={NAVIGATION_ROUTES.HOME}>
       <AuthStack.Screen
         name={NAVIGATION_ROUTES.LOGIN}
         component={LoginContainer}
@@ -251,16 +182,16 @@ function Authentication() {
         component={SignupContainer}
         options={{headerShown: false}}
       />
-      {/* <AuthStack.Screen
-        name={NAVIGATION_ROUTES.VERIFICATION}
-        component={VerficationScreen}
+      <AuthStack.Screen
+        name={NAVIGATION_ROUTES.OTP_VERFICATION}
+        component={OtpVerficationContainer}
         options={{headerShown: false}}
-      /> */}
-      {/* <AuthStack.Screen
+      />
+      <AuthStack.Screen
         name={NAVIGATION_ROUTES.HOME}
         component={Home}
         options={{headerShown: false}}
-      /> */}
+      />
     </AuthStack.Navigator>
   );
 }
@@ -275,8 +206,8 @@ export const Routes = () => {
 
 const styles = StyleSheet.create({
   tabText: {
-    color: colors.white,
+    color: colors.textGray,
     fontSize: 12,
-    // fontFamily: fonts.roboto_bold,
+    fontFamily: fonts.medium,
   },
 });
