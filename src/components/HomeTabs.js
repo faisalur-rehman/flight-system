@@ -16,6 +16,8 @@ import Button from './Button';
 import TravelersBottomSheet from './bottomsheet/TravelersBottomSheet';
 import FlightSearchField from './textfields/FlightSearchField';
 import {useSelector} from 'react-redux';
+import {NAVIGATION_ROUTES} from '../navigation/navigationRoutes';
+import {useNavigation} from '@react-navigation/native';
 
 const TABS = [
   {
@@ -33,6 +35,7 @@ const TABS = [
 ];
 
 export const HomeTabs = () => {
+  const nav = useNavigation();
   const data = useSelector(state => state?.travelers);
   const [index, setIndex] = React.useState(0);
   const [isShowMore, setIsShowMore] = useState(false);
@@ -101,6 +104,7 @@ export const HomeTabs = () => {
               <Button
                 disabled={!data?.travelers}
                 title={'Search'}
+                onPress={() => nav.navigate(NAVIGATION_ROUTES.FLIGHTS)}
                 containerStyle={{width: '100%'}}
               />
               <TouchableOpacity

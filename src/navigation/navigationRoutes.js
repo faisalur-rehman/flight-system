@@ -8,4 +8,5 @@ export const NAVIGATION_ROUTES = {
   WALLET: 'Wallet',
   BOOKING: 'Booking',
   OFFERS: 'Offers',
+  FLIGHTS: 'Flights',
 };
