@@ -16,15 +16,19 @@ const FlightSearchField = ({
   rightTop = 10,
   label,
   width = '50%',
+  disabled = false,
   ...restProps
 }) => {
   return (
-    <View style={[styles.wrapper, {width}]}>
+    <View
+      pointerEvents={disabled ? 'none' : 'auto'}
+      style={[styles.wrapper, {width}]}>
       <View style={{width: '100%', alignSelf: 'center'}}>
         <Text style={styles.label}>{label}</Text>
         <View style={styles.flexRow}>
           {icon}
           <TextInput
+            editable={!disabled}
             style={[styles.textField, textFieldStyle]}
             cursorColor={colors.black}
             autoCapitalize="none"
@@ -45,9 +49,6 @@ const styles = StyleSheet.create({
   wrapper: {width: '50%', marginVertical: 10},
   textField: {
     height: 50,
-    // borderWidth: 1,
-    // borderColor: colors.inputBorderColor,
-    // width: '50%',
     alignSelf: 'center',
     color: colors.blackText,
     fontSize: 16,

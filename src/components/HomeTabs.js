@@ -1,24 +1,21 @@
 import React, {useState} from 'react';
-import {Tab, Text, TabView} from '@rneui/themed';
-import {
-  StyleSheet,
-  View,
-  Platform,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {Text} from '@rneui/themed';
+import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {
   ArrowIcon,
   CalendarIcon,
   CarIcon,
   HotelIcon,
+  PassengersIcon,
   PlaneFromIcon,
   PlaneIcon,
   PlaneToIcon,
 } from '../assets';
 import {colors, fonts} from '../utils/theme';
 import Button from './Button';
+import TravelersBottomSheet from './bottomsheet/TravelersBottomSheet';
 import FlightSearchField from './textfields/FlightSearchField';
+import {useSelector} from 'react-redux';
 
 const TABS = [
   {
@@ -36,9 +33,10 @@ const TABS = [
 ];
 
 export const HomeTabs = () => {
+  const data = useSelector(state => state?.travelers);
   const [index, setIndex] = React.useState(0);
   const [isShowMore, setIsShowMore] = useState(false);
-
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   return (
     <View style={styles.container}>
       <View style={[styles.tabStyle, styles.flexRow]}>
@@ -90,14 +88,21 @@ export const HomeTabs = () => {
           />
           {isShowMore ? (
             <>
-              <FlightSearchField
-                label={'Travelers'}
-                icon={<CalendarIcon />}
-                placeholder="Sharjah (SHJ)"
-                width="100%"
+              <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
+                <FlightSearchField
+                  label={'Travelers'}
+                  icon={<PassengersIcon />}
+                  placeholder="2 adults, 3 children"
+                  width="100%"
+                  value={data?.fieldValue || ''}
+                  disabled
+                />
+              </TouchableOpacity>
+              <Button
+                disabled={!data?.travelers}
+                title={'Search'}
+                containerStyle={{width: '100%'}}
               />
-              <Button title={'Search'} containerStyle={{width: '100%'}} />
-
               <TouchableOpacity
                 onPress={() => setIsShowMore(!isShowMore)}
                 style={[styles.itemStyle, {alignItems: 'center'}]}>
@@ -117,6 +122,10 @@ export const HomeTabs = () => {
           )}
         </View>
       </View>
+      <TravelersBottomSheet
+        isVisible={isBottomSheetVisible}
+        closeBottomSheet={() => setIsBottomSheetVisible(false)}
+      />
     </View>
   );
 };

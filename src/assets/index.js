@@ -21,3 +21,5 @@ export {default as OfferImg} from './images/offer.png';
 export {default as PlaceImg1} from './images/place-img1.png';
 export {default as StarIcon} from './svgs/star.svg';
 export {default as HeartIcon} from './svgs/heart.svg';
+export {default as PassengersIcon} from './svgs/passengers.svg';
+export {default as BackArrowIcon} from './svgs/arrow-left.svg';
