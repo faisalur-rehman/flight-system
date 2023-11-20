@@ -15,9 +15,16 @@ import {colors, fonts} from '../utils/theme';
 import Button from './Button';
 import TravelersBottomSheet from './bottomsheet/TravelersBottomSheet';
 import FlightSearchField from './textfields/FlightSearchField';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {NAVIGATION_ROUTES} from '../navigation/navigationRoutes';
 import {useNavigation} from '@react-navigation/native';
+import {api} from '../api';
+import {url} from '../api/urls';
+import {showMessage} from '../utils/helpers';
+import DatePicker from 'react-native-date-picker';
+import Spinner from 'react-native-loading-spinner-overlay';
+import dayjs from 'dayjs';
+import {setFlightDetail} from '../redux/reducers/TravelersSlice';
 
 const TABS = [
   {
@@ -37,11 +44,80 @@ const TABS = [
 export const HomeTabs = () => {
   const nav = useNavigation();
   const data = useSelector(state => state?.travelers);
+  const dispatch = useDispatch();
   const [index, setIndex] = React.useState(0);
   const [isShowMore, setIsShowMore] = useState(false);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [dates, setDates] = useState({
+    return: null,
+    departure: null,
+  });
+  const [dateType, setdateType] = useState(null);
+  const [flightData, setFlightData] = useState({
+    journeyType: null,
+    OriginDestinationInfo: [],
+  });
+
+  const handleFlightType = journeyType => {
+    setFlightData(prev => ({...prev, journeyType}));
+  };
+
+  const handleFlightSearch = async () => {
+    const {OriginDestinationInfo} = flightData;
+    const payload = {
+      ...flightData,
+      OriginDestinationInfo: [
+        {
+          ...OriginDestinationInfo[0],
+          departureDate: dayjs(dates.departure).format('YYYY-MM-DD'),
+        },
+      ],
+      class: 'Economy',
+      ...data?.travelers,
+    };
+    if (flightData.journeyType == 'Circle') {
+      payload?.OriginDestinationInfo?.push({
+        departureDate: dayjs(dates.departure).format('YYYY-MM-DD'),
+        returnDate: dayjs(dates.return).format('YYYY-MM-DD'),
+        airportOriginCode: OriginDestinationInfo[0]?.airportDestinationCode,
+        airportDestinationCode: OriginDestinationInfo[0]?.airportOriginCode,
+      });
+    }
+    dispatch(
+      setFlightDetail({
+        origin: OriginDestinationInfo[0]?.airportOriginCode,
+        destination: OriginDestinationInfo[0]?.airportDestinationCode,
+        departureDate: dayjs(dates.departure).format('YYYY-MM-DD'),
+        ...(dates.return && {
+          returnDate: dayjs(dates.return).format('YYYY-MM-DD'),
+        }),
+      }),
+    );
+    setLoading(true);
+    try {
+      const res = await api.post(url.flights_search, payload, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      console.log({data: res.data?.message});
+      if (res.status == 200) {
+        nav.navigate(NAVIGATION_ROUTES.FLIGHTS, {
+          flights: res.data?.data?.flights,
+        });
+      } else {
+        showMessage('No Results Found');
+      }
+    } catch (error) {
+      console.error({error});
+    }
+    setLoading(false);
+  };
+
   return (
     <View style={styles.container}>
+      <Spinner visible={loading} />
       <View style={[styles.tabStyle, styles.flexRow]}>
         {TABS.map((tab, i) => (
           <TouchableOpacity
@@ -61,34 +137,109 @@ export const HomeTabs = () => {
       <View style={{width: '100%'}}>
         <View style={{width: '80%', alignSelf: 'center'}}>
           <View style={[styles.flexRow, styles.itemStyle]}>
-            <View style={styles.button}>
+            <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonTitle}>Business</Text>
-            </View>
-            <View style={styles.button}>
-              <Text style={styles.buttonTitle}>One Way</Text>
-            </View>
-            <View style={styles.button}>
-              <Text style={styles.buttonTitle}>Round Trip</Text>
-            </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleFlightType('OneWay')}
+              style={[
+                styles.button,
+                flightData?.journeyType == 'OneWay' && styles.selectedButton,
+              ]}>
+              <Text
+                style={[
+                  styles.buttonTitle,
+                  flightData?.journeyType == 'OneWay' && styles.selectedText,
+                ]}>
+                One Way
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleFlightType('Circle')}
+              style={[
+                styles.button,
+                flightData?.journeyType == 'Circle' && styles.selectedButton,
+              ]}>
+              <Text
+                style={[
+                  styles.buttonTitle,
+                  flightData?.journeyType == 'Circle' && styles.selectedText,
+                ]}>
+                Round Trip
+              </Text>
+            </TouchableOpacity>
           </View>
           <View style={[styles.flexRow, {justifyContent: 'space-between'}]}>
             <FlightSearchField
               label={'Flying From'}
+              onChangeText={text =>
+                setFlightData(prev => ({
+                  ...prev,
+                  OriginDestinationInfo: [
+                    {...prev.OriginDestinationInfo[0], airportOriginCode: text},
+                  ],
+                }))
+              }
               icon={<PlaneFromIcon />}
               placeholder="Dubai (DXB)"
             />
             <FlightSearchField
               label={'Flying To'}
               icon={<PlaneToIcon />}
+              onChangeText={text =>
+                setFlightData(prev => ({
+                  ...prev,
+                  OriginDestinationInfo: [
+                    {
+                      ...prev.OriginDestinationInfo[0],
+                      airportDestinationCode: text,
+                    },
+                  ],
+                }))
+              }
               placeholder="Sharjah (SHJ)"
             />
           </View>
-          <FlightSearchField
-            label={'Departure'}
-            icon={<CalendarIcon />}
-            placeholder="Sharjah (SHJ)"
-            width="100%"
-          />
+          <View style={[styles.flexRow, {justifyContent: 'space-between'}]}>
+            <TouchableOpacity
+              onPress={() => setdateType('departure')}
+              style={{
+                width: flightData.journeyType == 'Circle' ? '48%' : '100%',
+              }}>
+              <FlightSearchField
+                label={'Departure'}
+                icon={<CalendarIcon />}
+                disabled
+                value={
+                  dates.departure
+                    ? dayjs(dates.departure).format('DD MMM YYYY')
+                    : ''
+                }
+                width="100%"
+                placeholder="10/11/2023"
+              />
+            </TouchableOpacity>
+            {flightData.journeyType == 'Circle' ? (
+              <TouchableOpacity
+                onPress={() => setdateType('return')}
+                style={{
+                  width: '48%',
+                }}>
+                <FlightSearchField
+                  label={'Return'}
+                  icon={<CalendarIcon />}
+                  value={
+                    dates.return
+                      ? dayjs(dates.return).format('DD MMMM YYYY')
+                      : ''
+                  }
+                  placeholder="10/11/2023"
+                  disabled
+                  width="100%"
+                />
+              </TouchableOpacity>
+            ) : null}
+          </View>
           {isShowMore ? (
             <>
               <TouchableOpacity onPress={() => setIsBottomSheetVisible(true)}>
@@ -102,9 +253,9 @@ export const HomeTabs = () => {
                 />
               </TouchableOpacity>
               <Button
-                disabled={!data?.travelers}
+                disabled={!data?.fieldValue}
                 title={'Search'}
-                onPress={() => nav.navigate(NAVIGATION_ROUTES.FLIGHTS)}
+                onPress={handleFlightSearch}
                 containerStyle={{width: '100%'}}
               />
               <TouchableOpacity
@@ -129,6 +280,30 @@ export const HomeTabs = () => {
       <TravelersBottomSheet
         isVisible={isBottomSheetVisible}
         closeBottomSheet={() => setIsBottomSheetVisible(false)}
+      />
+      <DatePicker
+        modal
+        mode="date"
+        open={dateType ? true : false}
+        minimumDate={dateType == 'return' ? dates.departure : new Date()}
+        date={
+          dateType == 'return' && dates?.return
+            ? new Date(dates.return)
+            : dateType == 'departure' && dates?.departure
+            ? new Date(dates.departure)
+            : new Date()
+        }
+        onConfirm={date => {
+          if (dateType == 'return') {
+            setDates(prev => ({...prev, return: date}));
+          } else {
+            setDates(prev => ({...prev, departure: date}));
+          }
+          setdateType(null);
+        }}
+        onCancel={() => {
+          setdateType(null);
+        }}
       />
     </View>
   );
@@ -196,5 +371,11 @@ const styles = StyleSheet.create({
   indicator: {
     borderBottomWidth: 2,
     borderBottomColor: colors.primary,
+  },
+  selectedButton: {
+    backgroundColor: colors.primary,
+  },
+  selectedText: {
+    color: colors.white,
   },
 });

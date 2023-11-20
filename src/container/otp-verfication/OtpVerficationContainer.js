@@ -6,6 +6,8 @@ import {showMessage} from '../../utils/helpers';
 import {Platform} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CommonActions} from '@react-navigation/native';
+import {NAVIGATION_ROUTES} from '../../navigation/navigationRoutes';
 
 const OtpVerficationContainer = ({navigation, route: {params}}) => {
   const [code, setCode] = useState('');
@@ -28,6 +30,12 @@ const OtpVerficationContainer = ({navigation, route: {params}}) => {
       if (res.data?.data != null) {
         showMessage('Verification Successful!');
         await AsyncStorage.setItem('userData', JSON.stringify(res.data?.data));
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{name: NAVIGATION_ROUTES.HOME}],
+          }),
+        );
       } else {
         showMessage(res.data?.message);
       }

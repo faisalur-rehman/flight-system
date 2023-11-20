@@ -6,3 +6,4 @@ export {default as OffersScreen} from './offers/OffersScreen';
 export {default as WalletScreen} from './wallet/WalletScreen';
 export {default as BookingScreen} from './booking/BookingScreen';
 export {default as FlightScreen} from './flights/FlightScreen';
+export {default as FlightBookingScreen} from './flight-booking/FlightBookingScreen';

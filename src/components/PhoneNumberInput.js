@@ -3,7 +3,12 @@ import {StyleSheet, Text, View} from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import {colors, fonts} from '../utils/theme';
 
-const PhoneNumberInput = ({handleInput, label}) => {
+const PhoneNumberInput = ({
+  handleInput,
+  label,
+  containerStyles = {},
+  textInputStyles = {},
+}) => {
   return (
     <View>
       {label ? <Text style={styles.label}>{label}</Text> : null}
@@ -13,10 +18,10 @@ const PhoneNumberInput = ({handleInput, label}) => {
         onChangeFormattedText={text => {
           handleInput('phone', text);
         }}
-        containerStyle={styles.container}
+        containerStyle={[styles.container, containerStyles]}
         textInputStyle={styles.textInputStyle}
         codeTextStyle={styles.codeTextStyle}
-        textContainerStyle={styles.textContainerStyle}
+        textContainerStyle={[styles.textContainerStyle, textInputStyles]}
       />
     </View>
   );

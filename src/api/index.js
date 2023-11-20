@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 //Purpose: function  for setUp api calling structure
 const api = axios.create({
@@ -12,10 +13,12 @@ const api = axios.create({
 
 //Purpose: attache authorized token with apis
 api.interceptors.request.use(async function (config) {
-  // const token = await getData('token');
-  // if (token) {
-  //   config.headers.Authorization = `Bearer ${token}`;
-  // }
+  const userData = await AsyncStorage.getItem('userData');
+  const parsedData = JSON.parse(userData);
+  console.log({parsedData});
+  if (parsedData) {
+    config.headers.Authorization = `Bearer ${parsedData?.token}`;
+  }
 
   return config;
 });

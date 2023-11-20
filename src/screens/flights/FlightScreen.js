@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  FlatList,
   ImageBackground,
   ScrollView,
   StyleSheet,
@@ -17,12 +18,10 @@ import {
   SwapIcon,
 } from '../../assets';
 import {colors, fonts} from '../../utils/theme';
-import {useSelector} from 'react-redux';
 import FlightCard from '../../components/cards/FlightCard';
+import dayjs from 'dayjs';
 
-const FlightScreen = ({navigation}) => {
-  const travelers = useSelector(state => state?.travelers?.fieldValue);
-
+const FlightScreen = ({navigation, travelers, flightDetails, flights}) => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
@@ -32,14 +31,19 @@ const FlightScreen = ({navigation}) => {
               <BackArrowIcon />
             </TouchableOpacity>
             <View style={styles.flexRow}>
-              <Text style={styles.title}>DXB</Text>
+              <Text style={styles.title}>{flightDetails?.origin}</Text>
               <SwapIcon />
-              <Text style={styles.title}>KHI</Text>
+              <Text style={styles.title}>{flightDetails?.destination}</Text>
             </View>
             <EditIcon />
           </View>
           <Text style={[styles.title, {fontSize: 16}]}>
-            Sat, 13 Apr - Tue, 6 May
+            {dayjs(flightDetails?.departureDate).format('ddd, D MMM')}{' '}
+            {`${
+              flightDetails?.returnDate
+                ? dayjs(flightDetails?.returnDate).format('ddd, D MMM')
+                : ''
+            }`}
           </Text>
           <View style={[styles.flexRow, {marginTop: 8}]}>
             <PassengersIcon stroke="white" />
@@ -48,7 +52,7 @@ const FlightScreen = ({navigation}) => {
         </ImageBackground>
         <View style={[styles.flexRow, {marginTop: 15}]}>
           <Text style={styles.flightText}>
-            69 Flights{' '}
+            {flights?.length} Flights{' '}
             <Text style={{fontFamily: fonts.regular}}>Available</Text>
           </Text>
           <View style={styles.icon}>
@@ -65,6 +69,11 @@ const FlightScreen = ({navigation}) => {
             <LightArrowIcon />
           </View>
         </View>
+        <FlatList
+          data={flights}
+          renderItem={({item}) => <FlightCard flight={item} />}
+          keyExtractor={item => item?.sourceCode}
+        />
         <FlightCard />
       </ScrollView>
     </View>

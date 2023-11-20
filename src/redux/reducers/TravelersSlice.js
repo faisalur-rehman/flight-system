@@ -3,6 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   travelers: null,
   fieldValue: '',
+  flightDetails: null,
 };
 
 const TravelersSlice = createSlice({
@@ -11,6 +12,7 @@ const TravelersSlice = createSlice({
   reducers: {
     setFlightTravelers(state, action) {
       const travel = action.payload;
+      state.fieldValue = '';
       if (travel?.adults > 0) {
         state.fieldValue += `${travel?.adults} adults, `;
       }
@@ -22,9 +24,12 @@ const TravelersSlice = createSlice({
       }
       state.travelers = action.payload;
     },
+    setFlightDetail(state, action) {
+      state.flightDetails = action.payload;
+    },
   },
 });
 
-export const {setFlightTravelers} = TravelersSlice.actions;
+export const {setFlightTravelers, setFlightDetail} = TravelersSlice.actions;
 
 export default TravelersSlice.reducer;

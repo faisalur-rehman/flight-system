@@ -9,4 +9,5 @@ export const NAVIGATION_ROUTES = {
   BOOKING: 'Booking',
   OFFERS: 'Offers',
   FLIGHTS: 'Flights',
+  FLIGHT_BOOKING: 'FlightsBooking',
 };

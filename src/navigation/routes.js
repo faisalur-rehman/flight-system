@@ -7,6 +7,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StyleSheet, Text, View} from 'react-native';
 import {
   BookingContainer,
+  FlightBookingContainer,
   FlightsContainer,
   HomeContainer,
   LoginContainer,
@@ -167,6 +168,11 @@ function Home() {
       <HomeStack.Screen
         name={NAVIGATION_ROUTES.FLIGHTS}
         component={FlightsContainer}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name={NAVIGATION_ROUTES.FLIGHT_BOOKING}
+        component={FlightBookingContainer}
         options={{headerShown: false}}
       />
     </HomeStack.Navigator>

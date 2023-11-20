@@ -31,4 +31,5 @@ export {default as LuggageIcon} from './svgs/luggage.svg';
 export {default as ClockIcon} from './svgs/clock.svg';
 export {default as DotIcon} from './svgs/dot.svg';
 export {default as MarkerIcon} from './svgs/marker.svg';
+export {default as CustomiseIcon} from './svgs/customize.svg';
 export {default as ClockCalendarIcon} from './svgs/clock-calendar.svg';

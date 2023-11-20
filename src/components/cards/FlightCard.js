@@ -14,38 +14,58 @@ import {
 } from '../../assets';
 import {Divider} from '@rneui/themed';
 import Button from '../Button';
+import {NAVIGATION_ROUTES} from '../../navigation/navigationRoutes';
+import {useNavigation} from '@react-navigation/native';
+import dayjs from 'dayjs';
 
-const FlightCard = () => {
+const FlightCard = ({flight}) => {
+  const nav = useNavigation();
   const [isShowDetail, setIsShowDetail] = useState(false);
   const [routeIndex, setRouteIndex] = useState(0);
+  const tourSegment = flight?.originDestinationOptions[0]?.tourSegments?.[0];
   return (
     <View style={styles.container}>
       <View style={styles.flexRow}>
         <View style={[styles.flexRow, {justifyContent: 'flex-start'}]}>
           <Image source={UserImg} style={styles.img} />
-          <Text style={styles.name}>Emirates</Text>
+          <Text style={styles.name}>{tourSegment?.AirlineName}</Text>
         </View>
-        <Text style={styles.amount}>$560.33</Text>
+        <Text style={styles.amount}>${flight?.fareTotal?.total?.Amount}</Text>
       </View>
       <View style={[styles.flexRow, {marginTop: 15, marginBottom: 5}]}>
-        <Text style={styles.location}>DXB</Text>
-        <Text style={styles.location}>KHI</Text>
-        <Text style={styles.location}>LHE</Text>
-      </View>
-      <View style={styles.flexRow}>
-        <DotIcon />
-        <View style={styles.dashedView} />
-        <PlaneIcon />
-        <View style={styles.dashedView} />
-        <DotIcon />
-      </View>
-      <View style={[styles.flexRow, {marginVertical: 5}]}>
-        <Text style={styles.location}>09:35</Text>
-        <View style={styles.flexRow}>
-          <ClockIcon />
-          <Text style={styles.location}>08:45</Text>
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.location}>
+            {tourSegment?.DepartureAirportCode}
+          </Text>
+          <View style={{marginVertical: 5}}>
+            <DotIcon />
+          </View>
+          <Text style={styles.location}>
+            {dayjs(tourSegment?.DepartureDateTime).format('hh:mm A')}
+          </Text>
         </View>
-        <Text style={styles.location}>07:50</Text>
+        <View style={styles.dashedView} />
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.location}>KHI</Text>
+          <View style={{marginVertical: 5}}>
+            <PlaneIcon />
+          </View>
+          <View style={styles.flexRow}>
+            <ClockIcon />
+            <Text style={styles.location}>08:45</Text>
+          </View>
+        </View>
+        <View style={styles.dashedView} />
+
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.location}>{tourSegment?.ArrivalAirportCode}</Text>
+          <View style={{marginVertical: 5}}>
+            <DotIcon />
+          </View>
+          <Text style={styles.location}>
+            {dayjs(tourSegment?.ArrivalDateTime).format('hh:mm A')}
+          </Text>
+        </View>
       </View>
       <Divider style={{marginVertical: 10}} color={colors.textGray} />
       {isShowDetail ? (
@@ -53,11 +73,17 @@ const FlightCard = () => {
           <View style={styles.flexRow}>
             <View
               style={[styles.route, routeIndex == 0 && styles.selectedRoute]}>
-              <Text style={styles.detail}>(LHE) - (DXB)</Text>
+              <Text style={styles.detail}>
+                ({tourSegment?.DepartureAirportCode}) - (
+                {tourSegment?.ArrivalAirportCode})
+              </Text>
             </View>
             <View
               style={[styles.route, routeIndex == 1 && styles.selectedRoute]}>
-              <Text style={styles.detail}>(DXB) - (LHE)</Text>
+              <Text style={styles.detail}>
+                ({tourSegment?.ArrivalAirportCode}) - (
+                {tourSegment?.DepartureAirportCode})
+              </Text>
             </View>
           </View>
           <View
@@ -67,12 +93,18 @@ const FlightCard = () => {
             ]}>
             <ClockCalendarIcon />
             <View style={{marginLeft: 10}}>
-              <Text style={[styles.location, styles.bold]}>13 APRIL 2023</Text>
-              <Text style={styles.location}>Tuesday</Text>
+              <Text style={[styles.location, styles.bold]}>
+                {dayjs(tourSegment?.DepartureDateTime).format('DD MMMM YYYY')}
+              </Text>
+              <Text style={styles.location}>
+                {dayjs(tourSegment?.DepartureDateTime).format('dddd')}
+              </Text>
             </View>
           </View>
           <Text style={[styles.location, {marginLeft: 10}]}>
-            <Text style={styles.name}>09:35 Lahore </Text>
+            <Text style={styles.name}>
+              {dayjs(tourSegment?.DepartureDateTime).format('hh:mm A')} Lahore{' '}
+            </Text>
             Allama Iqbal International (LHE)
           </Text>
           <View
@@ -203,6 +235,7 @@ const FlightCard = () => {
               title={'Select Flight'}
               titleStyle={{fontSize: 12, fontFamily: fonts.semiBold}}
               containerStyle={{paddingHorizontal: 15}}
+              onPress={() => nav?.navigate(NAVIGATION_ROUTES.FLIGHT_BOOKING)}
             />
             <TouchableOpacity
               onPress={() => setIsShowDetail(false)}
@@ -270,7 +303,7 @@ const styles = StyleSheet.create({
     color: colors.blackText,
   },
   dashedView: {
-    width: '30%',
+    width: '23%',
     borderWidth: 0.9,
     borderColor: colors.primary,
     borderStyle: 'dashed',

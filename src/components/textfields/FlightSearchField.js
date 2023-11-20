@@ -15,7 +15,7 @@ const FlightSearchField = ({
   textFieldStyle = {},
   rightTop = 10,
   label,
-  width = '50%',
+  width = '48%',
   disabled = false,
   ...restProps
 }) => {
@@ -37,7 +37,7 @@ const FlightSearchField = ({
             {...restProps}
           />
         </View>
-        <Divider style={{width: '90%'}} />
+        <Divider style={{width: '100%'}} />
       </View>
     </View>
   );
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: colors.blackText,
     fontSize: 16,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     position: 'relative',
     borderRadius: 30,
   },

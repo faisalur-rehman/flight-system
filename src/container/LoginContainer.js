@@ -4,6 +4,7 @@ import {api} from '../api';
 import {url} from '../api/urls';
 import {showMessage} from '../utils/helpers';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {NAVIGATION_ROUTES} from '../navigation/navigationRoutes';
 
 const LoginContainer = ({navigation}) => {
   const [fields, setFields] = useState({email: '', password: ''});
@@ -38,6 +39,9 @@ const LoginContainer = ({navigation}) => {
     try {
       const res = await api.post(url.login, fields);
       if (res.status == 200) {
+        navigation.navigate(NAVIGATION_ROUTES.OTP_VERFICATION, {
+          userId: res.data?.data?.user_id,
+        });
       } else {
         showMessage(res.data?.message);
       }

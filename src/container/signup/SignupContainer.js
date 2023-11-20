@@ -70,7 +70,6 @@ const SignupContainer = ({navigation}) => {
     setLoading(true);
     try {
       const res = await api.post(url.register, fields);
-      console.log({status: res.status, data: res.data});
       if (res.status == 200) {
         navigation?.navigate(NAVIGATION_ROUTES.OTP_VERFICATION, {
           userId: res.data?.data?.user_id,

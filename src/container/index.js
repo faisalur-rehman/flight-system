@@ -6,3 +6,4 @@ export {default as OffersContainer} from './offers/OffersContainer';
 export {default as BookingContainer} from './booking/BookingContainer';
 export {default as WalletContainer} from './wallet/WalletContainer';
 export {default as FlightsContainer} from './flights/FlightsContainer';
+export {default as FlightBookingContainer} from './flight-booking/FlightBookingContainer';

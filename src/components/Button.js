@@ -8,13 +8,26 @@ const Button = ({
   disabled = false,
   titleStyle = {},
   containerStyle = {},
+  primary = true,
 }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
-      style={[styles.container, containerStyle]}>
-      <Text style={[styles.title, titleStyle]}>{title}</Text>
+      style={[
+        styles.container,
+        !primary && {backgroundColor: 'transparent'},
+        containerStyle,
+      ]}>
+      <Text
+        style={[
+          styles.title,
+          !primary && {color: colors.primary},
+          ,
+          titleStyle,
+        ]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -25,6 +38,8 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 30,
     backgroundColor: colors.primary,
+    borderColor: colors.primary,
+    borderWidth: 1,
     justifyContent: 'center',
     alignSelf: 'center',
     marginVertical: 10,
