@@ -25,6 +25,7 @@ import DatePicker from 'react-native-date-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
 import dayjs from 'dayjs';
 import {setFlightDetail} from '../redux/reducers/TravelersSlice';
+import {validateFlightSearch} from '../utils/validations/SearchFlightSchema';
 
 const TABS = [
   {
@@ -64,6 +65,9 @@ export const HomeTabs = () => {
   };
 
   const handleFlightSearch = async () => {
+    if (!validateFlightSearch({...flightData, ...dates, dateType})) {
+      return;
+    }
     const {OriginDestinationInfo} = flightData;
     const payload = {
       ...flightData,

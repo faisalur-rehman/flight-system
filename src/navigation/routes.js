@@ -181,7 +181,7 @@ function Home() {
 
 function Authentication() {
   return (
-    <AuthStack.Navigator initialRouteName={NAVIGATION_ROUTES.HOME}>
+    <AuthStack.Navigator initialRouteName={NAVIGATION_ROUTES.LOGIN}>
       <AuthStack.Screen
         name={NAVIGATION_ROUTES.LOGIN}
         component={LoginContainer}

@@ -256,10 +256,10 @@ export default FlightCard;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.70)',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     paddingVertical: 20,
-    paddingHorizontal: 25,
-    marginHorizontal: 25,
+    paddingHorizontal: 10,
+    marginHorizontal: 15,
     margin: 15,
     borderRadius: 20,
     shadowColor: 'rgba(0, 0, 0, 0.07)',
@@ -303,8 +303,8 @@ const styles = StyleSheet.create({
     color: colors.blackText,
   },
   dashedView: {
-    width: '23%',
-    borderWidth: 0.9,
+    width: '21%',
+    borderWidth: 0.8,
     borderColor: colors.primary,
     borderStyle: 'dashed',
     height: 1,

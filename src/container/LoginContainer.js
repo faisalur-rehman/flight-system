@@ -1,15 +1,33 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {LoginScreen} from '../screens';
 import {api} from '../api';
 import {url} from '../api/urls';
 import {showMessage} from '../utils/helpers';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {NAVIGATION_ROUTES} from '../navigation/navigationRoutes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CommonActions} from '@react-navigation/native';
 
 const LoginContainer = ({navigation}) => {
   const [fields, setFields] = useState({email: '', password: ''});
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    isUserLoggedIn();
+  }, []);
+
+  const isUserLoggedIn = async () => {
+    const userData = await AsyncStorage.getItem('userData');
+    if (userData) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: NAVIGATION_ROUTES.HOME}],
+        }),
+      );
+    }
+  };
 
   const handleInput = (key, value) => {
     setFields(prev => ({...prev, [key]: value}));
